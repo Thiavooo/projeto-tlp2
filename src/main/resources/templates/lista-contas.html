@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Contas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #dddddd; text-align: left; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        a { text-decoration: none; }
+        .btn { padding: 8px 12px; border-radius: 4px; color: white; margin-right: 5px; }
+        .btn-novo { background-color: #28a745; margin-bottom: 20px; display: inline-block; }
+        .btn-editar { background-color: #007bff; }
+        .btn-excluir { background-color: #dc3545; }
+
+        /* --- NOVO ESTILO ADICIONADO --- */
+        .btn-pagar { background-color: #ffc107; color: black; }
+
+    </style>
+</head>
+<body>
+
+<h1>Minhas Contas a Pagar</h1>
+
+<a th:href="@{/novo}" class="btn btn-novo">Adicionar Nova Conta</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>Descrição</th>
+        <th>Valor (R$)</th>
+        <th>Data de Vencimento</th>
+        <th>Status</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="conta : ${contas}">
+        <td th:text="${conta.descricao}">Descrição da Conta</td>
+        <td th:text="${#numbers.formatDecimal(conta.valor, 1, 'POINT', 2, 'COMMA')}">150.00</td>
+        <td th:text="${#temporals.format(conta.dataVencimento, 'dd/MM/yyyy')}">dd/mm/aaaa</td>
+        <td th:text="${conta.pago} ? 'Pago' : 'Pendente'">Pendente</td>
+        <td>
+            <a th:if="${!conta.pago}" th:href="@{/marcar-pago/{id}(id=${conta.id})}" class="btn btn-pagar">Pagar</a>
+
+            <a th:href="@{/editar/{id}(id=${conta.id})}" class="btn btn-editar">Editar</a>
+            <a th:href="@{/excluir/{id}(id=${conta.id})}" class="btn btn-excluir">Excluir</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
